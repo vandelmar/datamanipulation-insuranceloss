@@ -1,0 +1,78 @@
+---
+title: "Data Visualization"
+author: "Irfan"
+date: "22/05/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+## 1. Import Insurance Loss Data set
+
+```{r}
+getwd()
+setwd("D:/Courses/Data Science/Dibimbing/Day 9")
+getwd()
+
+library(tidyverse)
+library(ggplot2)
+
+insurance <- read.table("Insurance_Loss.csv", header=TRUE, sep=",")
+
+glimpse(insurance)
+
+```
+
+## 2. Membuat visualisasi dari data "Insurance Loss" dan menjelaskan insights yang didapat.
+
+1) Geom Point berdasarkan Age terhadap Losses.
+
+```{r}
+ggplot(insurance, aes(x = Age, y = Losses, color = Losses)) + geom_point()
+
+```
+
+Penjelasan : Dari visusalisasi grafik diatas dapat diambil kesimpulan bahwa customer pada usia <= 20thn yg menyebabkan kerugian asuransi terbanyak.
+
+
+2) Geom Point + Boxplot berdasarkan Gender terhadap Losses.
+
+```{r}
+ggplot(insurance, aes(x = Gender, y = Losses, color = Gender)) + geom_point() + geom_boxplot()
+```
+
+Penjelasan : Dari visusalisasi grafik diatas dapat diambil kesimpulan bahwa customer dengan gender Male yg menyebabkan kerugian asuransi terbanyak.
+
+3) Geom Point + Facet Wrap berdasarkan Gender dan Status terhadap Losses
+
+```{r}
+ggplot(insurance, aes(x = Gender, y = Losses, color = Gender)) + geom_point() + facet_wrap(~Married)
+```
+
+Penjelasan : Dari grafik no.2 dapat diklasifikasikan lagi dari Status Perkawinan (Married), dan dapat diambil kesimpulan lagi bahwa customer dengan gender Male dengan status Single yg menyebabkan kerugian asuransi terbanyak
+
+4) Geom Freqpoly berdasarkan Losess dan Age Group terhadap jumlah klaim asuransi.
+
+```{r}
+AgeLabel = c('Pediatric', 'Youth', 'Middle-Aged', 'Elderly')
+  insurance$AgeGroup = cut(insurance$Age, breaks = c(0,14,47,63,Inf),
+  labels = AgeLabel, right = FALSE)
+
+ggplot(data=insurance,mapping = aes(x=Losses,color=AgeGroup)) + geom_freqpoly(binwidth = 60)
+```
+
+Penjelasan : Dari visusalisasi grafik diatas dapat diambil kesimpulan bahwa customer dengan Age Group = Youth jumlah yang paling tinggi dalam mengklaim asuransi
+
+5) Geom Bar berdasarkan Driving Experience terhadap jumlah klaim asuransi.
+
+```{r}
+DriveExpLabel = c('Beginner', 'Intermediate', 'Advance', 'Excellence')
+insurance$DriveExpGroup = cut(insurance$Years.of.Driving.Experience, breaks = c(0,5,10,15,Inf),
+labels = DriveExpLabel, right = FALSE)
+
+ggplot(insurance,aes(x=DriveExpGroup, fill=DriveExpGroup)) + geom_bar()
+```
+
+Penjelasan : Dari visusalisasi grafik diatas dapat diambil kesimpulan bahwa customer dengan Drive Expeerience Group = Excellence jumlah yang paling tinggi dalam mengklaim asuransi, disusul Drive Expeerience Group = Beginner.
+
+
+## Thank You
